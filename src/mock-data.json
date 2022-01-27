@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "title": "Meetings",
+    "text": "Schedule meeting with team",
+    "color": "#dfdfdf",
+    "date": "new Date().toString()"
+  },
+  {
+    "id": 2,
+    "title": "Learning Path",
+    "text": "Complete Reactjs",
+    "color": "#dfdfdf",
+    "date": "new Date().toString()"
+  }
+]
