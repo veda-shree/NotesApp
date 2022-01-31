@@ -3,7 +3,11 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import ReadOnlyRows, { IReadOnlyRowsProps } from "../components/ReadonlyRows";
 import "regenerator-runtime/runtime";
+import enzyme from "enzyme";
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
+// import { shallow, mount } from "enzyme";
 
+enzyme.configure({ adapter: new Adapter() });
 function renderReadOnlyRow(props: Partial<IReadOnlyRowsProps> = {}) {
   const defaultProps: IReadOnlyRowsProps = {
     mocknote() {
@@ -46,4 +50,12 @@ describe("<ReadOnlyRows/>", () => {
     // userEvent.click(screen.getByRole("Trash"));
     expect(handleOnDelete).toHaveBeenCalled();
   });
+
+  // it("should render the data in table", () => {
+  //   const wrapper = shallow( <td>{mocknote.title}</td>);
+  //   const td = wrapper.find('td');
+  //   expect(wrapper.containsMatchingElement(<td>{mocknote.title}</td>)).toBe(
+  //     true
+  //   );
+  // });
 });
