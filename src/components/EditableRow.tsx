@@ -4,7 +4,7 @@ import * as React from "react";
 
 export interface IEditableRowProps {
   editFormData: any;
-  handleEditFormChange: (event: any) => void;
+  handleEditFormChange: React.ChangeEventHandler<HTMLInputElement>;
   handleEditFormSubmit: (event: any) => void;
   handleOnCancel: any;
 

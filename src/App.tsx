@@ -9,13 +9,19 @@ import data from "./mock-data.json";
 import ReadOnlyRows from "./components/ReadonlyRows";
 import EditableRow from "./components/EditableRow";
 import { nanoid } from "nanoid";
+// import api from "./api/mocknotes";
 import "antd/dist/antd.css";
 import { Modal } from "antd";
 
 function App() {
   const [editNoteId, seteditNoteId] = useState(null);
-
+  // const LOCAL_STORAGE_KEY = "mocknotes";
   const [mocknotes, setmocknotes] = useState<Note[]>(data);
+
+  // const retrieveNotes = async () => {
+  //   const response = await api.get("/mocknotes");
+  //   return response.data;
+  // };
   const [notes, setNotes] = useState<Note[]>([
     {
       id: nanoid(),
@@ -25,6 +31,21 @@ function App() {
       date: new Date().toString(),
     },
   ]);
+
+  // useEffect(() => {
+  //   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(mocknotes));
+  // }, [mocknotes]);
+
+  // useEffect(() => {
+  //   // const retriveNotes = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+  //   // if (retriveNotes) setmocknotes(retriveNotes);
+  //   const getAllNotes = async () => {
+  //     const allNotes = await retrieveNotes();
+  //     if (allNotes) setmocknotes(allNotes);
+  //   };
+  //   getAllNotes();
+  // }, []);
+
   const [editFormData, seteditFormData] = useState({
     id: nanoid(),
     title: "Meetings",
@@ -44,7 +65,7 @@ function App() {
     });
   };
 
-  const handleEditFormChange = (event: any) => {
+  const handleEditFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -58,7 +79,7 @@ function App() {
     event.preventDefault();
 
     const editedEmp = {
-      id: editNoteId,
+      id: editNoteId.id,
       title: editFormData.title,
       text: editFormData.text,
       color: editFormData.color,
@@ -75,7 +96,10 @@ function App() {
     setmocknotes(newMockNotes);
     seteditNoteId(null);
   };
-  const handleOnEdit = (event: any, mocknote: any) => {
+  const handleOnEdit = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    mocknote: any
+  ) => {
     event.preventDefault();
     seteditNoteId(mocknote.id);
 
@@ -108,7 +132,7 @@ function App() {
         </Row>
 
         <div className="app-container">
-          <form data-testid="table" onSubmit={handleEditFormSubmit}>
+          <form onSubmit={handleEditFormSubmit}>
             <table>
               <thead>
                 <tr>
@@ -125,8 +149,8 @@ function App() {
                         key={mocknote.id}
                         editFormData={editFormData}
                         handleEditFormChange={handleEditFormChange}
-                        handleOnCancel={handleOnCancel}
                         handleEditFormSubmit={handleEditFormSubmit}
+                        handleOnCancel={handleOnCancel}
                       />
                     ) : (
                       <ReadOnlyRows

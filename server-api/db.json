@@ -1,0 +1,18 @@
+{
+  "mocknotes": [
+    {
+      "id": "nanoid()",
+      "title": "Meetings",
+      "text": "Schedule meeting with team",
+      "color": "#dfdfdf",
+      "date": "new Date().toString()"
+    },
+    {
+      "id": "nanoid()",
+      "title": "Learning Path",
+      "text": "Complete Reactjs",
+      "color": "#dfdfdf",
+      "date": "new Date().toString()"
+    }
+  ]
+}

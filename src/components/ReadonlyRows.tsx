@@ -5,7 +5,10 @@ export interface IReadOnlyRowsProps {
   mocknote: any;
   handleOnDelete: (id: string | number) => void;
   // seteditNotes: React.Dispatch<React.SetStateAction<null>>;
-  handleOnEdit: (event: any, mocknote: any) => void;
+  handleOnEdit: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    mocknote: any
+  ) => void;
 }
 
 const ReadOnlyRows: React.FunctionComponent<IReadOnlyRowsProps> = ({
