@@ -1,72 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, VoidFunctionComponent } from "react";
 import { Note } from "./models/note.model";
 import Header from "./components/Header";
 import "./App.css";
 import { Col, Container, Row } from "react-bootstrap";
-import NotesList from "./components/NotesList";
 import CreateNotes from "./components/CreateNotes";
 import data from "./mock-data.json";
-import ReadOnlyRows from "./components/ReadonlyRows";
-import EditableRow from "./components/EditableRow";
-import { nanoid } from "nanoid";
-// import api from "./api/mocknotes";
 import "antd/dist/antd.css";
 import { Modal } from "antd";
+import { nanoid } from "nanoid";
 
+// export interface Props {
+//   handleOnDelete: (id: string | number) => void;
+//   handleEditFormChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+//   handleEditFormSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+//   handleSubmit: (event: React.MouseEvent<HTMLButtonElement>) => void;
+//   handleOnEdit: (
+//     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+//     note: any
+//   ) => void;
+//   handleOnCancel: () => void;
+// }
 function App() {
-  const [editNoteId, seteditNoteId] = useState(null);
-  // const LOCAL_STORAGE_KEY = "mocknotes";
-  const [mocknotes, setmocknotes] = useState<Note[]>(data);
-
-  // const retrieveNotes = async () => {
-  //   const response = await api.get("/mocknotes");
-  //   return response.data;
-  // };
-  const [notes, setNotes] = useState<Note[]>([
-    {
-      id: nanoid(),
-      title: "Meetings",
-      text: "Schedule meeting with team",
-      color: "#dfdfdf",
-      date: new Date().toString(),
-    },
-  ]);
-
-  // useEffect(() => {
-  //   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(mocknotes));
-  // }, [mocknotes]);
-
-  // useEffect(() => {
-  //   // const retriveNotes = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-  //   // if (retriveNotes) setmocknotes(retriveNotes);
-  //   const getAllNotes = async () => {
-  //     const allNotes = await retrieveNotes();
-  //     if (allNotes) setmocknotes(allNotes);
-  //   };
-  //   getAllNotes();
-  // }, []);
-
+  const [editNoteId, seteditNoteId] = useState("" as string);
+  const [notes, setnotes] = useState<Note[]>(data);
   const [editFormData, seteditFormData] = useState({
     id: nanoid(),
     title: "Meetings",
     text: "Schedule meeting with team",
-    color: "#dfdfdf",
-    date: new Date().toString(),
   });
 
   const handleOnDelete = (id: string | number) => {
+    console.log("click the delete button");
     Modal.confirm({
       title: "Are you sure you want to delete?",
       okText: "Yes",
       okType: "danger",
+      cancelText: "Cancel",
+      onCancel: handleOnCancel,
       onOk: () => {
-        setmocknotes(mocknotes.filter((mocknote) => mocknote.id !== id));
+        setnotes(notes.filter((note) => note.id !== id));
+        console.log("Item deleted successfully!");
       },
     });
   };
 
   const handleEditFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
+    console.log(event.currentTarget);
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
 
@@ -77,62 +57,65 @@ function App() {
 
   const handleEditFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    console.log(event.currentTarget);
     const editedEmp = {
-      id: editNoteId.id,
+      id: editNoteId,
       title: editFormData.title,
       text: editFormData.text,
-      color: editFormData.color,
-      date: editFormData.date,
     };
 
-    const newMockNotes = [...mocknotes];
-    const index = mocknotes.findIndex(
-      (mocknote) => mocknote.id === editNoteId.id
-    );
+    const newNotes = [...notes];
+    const index = notes.findIndex((note) => note.id === editNoteId);
 
-    newMockNotes[index] = editedEmp;
+    newNotes[index] = editedEmp;
 
-    setmocknotes(newMockNotes);
+    setnotes(newNotes);
+    seteditNoteId(null);
+  };
+
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    console.log(event.currentTarget);
+    const editedEmp = {
+      id: editNoteId,
+      title: editFormData.title,
+      text: editFormData.text,
+    };
+
+    const newNotes = [...notes];
+    const index = notes.findIndex((note) => note.id === editNoteId);
+
+    newNotes[index] = editedEmp;
+
+    setnotes(newNotes);
     seteditNoteId(null);
   };
   const handleOnEdit = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    mocknote: any
+    note: any
   ) => {
     event.preventDefault();
-    seteditNoteId(mocknote.id);
-
+    console.log(event.currentTarget);
+    seteditNoteId(note.id);
     const formValues = {
-      id: mocknote.id,
-      title: mocknote.title,
-      text: mocknote.text,
-      color: mocknote.color,
-      date: mocknote.date,
+      id: note.id,
+      title: note.title,
+      text: note.text,
     };
     seteditFormData(formValues);
   };
 
   const handleOnCancel = () => {
     seteditNoteId(null);
+    console.log("canceled successfully!");
   };
+
   return (
     <>
       <Header />
       <Container className="mt-5">
-        <Row>
-          <Col>
-            <NotesList
-              notes={notes}
-              setNotes={setNotes}
-              mocknotes={mocknotes}
-              setmocknotes={setmocknotes}
-            />
-          </Col>
-        </Row>
-
         <div className="app-container">
-          <form onSubmit={handleEditFormSubmit}>
+          <form data-testid="app" onSubmit={handleEditFormSubmit}>
             <table>
               <thead>
                 <tr>
@@ -141,23 +124,72 @@ function App() {
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {mocknotes.map((mocknote) => (
+              <tbody data-testid="tbody">
+                {notes.map((note) => (
                   <>
-                    {editNoteId === mocknote.id ? (
-                      <EditableRow
-                        key={mocknote.id}
-                        editFormData={editFormData}
-                        handleEditFormChange={handleEditFormChange}
-                        handleEditFormSubmit={handleEditFormSubmit}
-                        handleOnCancel={handleOnCancel}
-                      />
+                    {editNoteId === note.id ? (
+                      <tr>
+                        <td>
+                          <input
+                            data-testid="title"
+                            type="text"
+                            placeholder="Enter title for the Note"
+                            name="title"
+                            value={editFormData.title}
+                            onChange={handleEditFormChange}
+                          ></input>
+                        </td>
+                        <td>
+                          <input
+                            data-testid="text"
+                            type="text"
+                            placeholder="Enter text for the Note"
+                            name="text"
+                            value={editFormData.text}
+                            onChange={handleEditFormChange}
+                          ></input>
+                        </td>
+                        <td>
+                          <button
+                            className="button"
+                            type="submit"
+                            onClick={handleSubmit}
+                            data-testid="submit"
+                          >
+                            Save
+                          </button>
+                          <button
+                            className="button"
+                            type="button"
+                            onClick={handleOnCancel}
+                            data-testid="cancel"
+                          >
+                            Cancel
+                          </button>
+                        </td>
+                      </tr>
                     ) : (
-                      <ReadOnlyRows
-                        mocknote={mocknote}
-                        handleOnDelete={handleOnDelete}
-                        handleOnEdit={handleOnEdit}
-                      />
+                      <tr>
+                        <td>{note.title}</td>
+                        <td>{note.text}</td>
+                        <td>
+                          <button
+                            className="button"
+                            type="submit"
+                            onClick={(event) => handleOnEdit(event, note)}
+                          >
+                            Edit
+                          </button>
+
+                          <button
+                            className="button"
+                            type="submit"
+                            onClick={() => handleOnDelete(note.id)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
                     )}
                   </>
                 ))}
@@ -168,12 +200,7 @@ function App() {
 
         <Row>
           <Col>
-            <CreateNotes
-              notes={notes}
-              setNotes={setNotes}
-              mocknotes={mocknotes}
-              setmocknotes={setmocknotes}
-            />
+            <CreateNotes notes={notes} setnotes={setnotes} />
           </Col>
         </Row>
       </Container>

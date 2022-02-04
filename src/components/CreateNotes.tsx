@@ -4,22 +4,22 @@ import { Alert, Button, Form } from "react-bootstrap";
 import { Note } from "../models/note.model";
 
 interface ICreateNotesProps {
+  // notes: Note[];
+  // setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
   notes: Note[];
-  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
-  mocknotes: Note[];
-  setmocknotes: React.Dispatch<React.SetStateAction<Note[]>>;
+  setnotes: React.Dispatch<React.SetStateAction<Note[]>>;
 }
 
 const CreateNotes: React.FunctionComponent<ICreateNotesProps> = ({
+  // notes,
+  // setNotes,
   notes,
-  setNotes,
-  mocknotes,
-  setmocknotes,
+  setnotes,
 }) => {
   const [error, setError] = React.useState<string>("");
   const titleRef = React.useRef<HTMLInputElement | null>(null);
   const textRef = React.useRef<HTMLTextAreaElement | null>(null);
-  const colorRef = React.useRef<HTMLInputElement | null>(null);
+  // const colorRef = React.useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -27,25 +27,25 @@ const CreateNotes: React.FunctionComponent<ICreateNotesProps> = ({
       return setError("All fields are mandatory");
     }
     setError("");
-    setNotes([
+    // setNotes([
+    //   ...notes,
+    //   {
+    //     id: nanoid(),
+    //     title: (titleRef.current as HTMLInputElement).value,
+    //     text: (textRef.current as HTMLTextAreaElement).value,
+    //     color: (colorRef.current as HTMLInputElement).value,
+    //     date: new Date().toString(),
+    //   },
+    // ]);
+
+    setnotes([
       ...notes,
       {
         id: nanoid(),
         title: (titleRef.current as HTMLInputElement).value,
         text: (textRef.current as HTMLTextAreaElement).value,
-        color: (colorRef.current as HTMLInputElement).value,
-        date: new Date().toString(),
-      },
-    ]);
-
-    setmocknotes([
-      ...mocknotes,
-      {
-        id: nanoid(),
-        title: (titleRef.current as HTMLInputElement).value,
-        text: (textRef.current as HTMLTextAreaElement).value,
-        color: (colorRef.current as HTMLInputElement).value,
-        date: new Date().toString(),
+        // color: (colorRef.current as HTMLInputElement).value,
+        // date: new Date().toString(),
       },
     ]);
 
@@ -76,7 +76,7 @@ const CreateNotes: React.FunctionComponent<ICreateNotesProps> = ({
           />
         </Form.Group>
 
-        <Form.Group className="mb-3">
+        {/* <Form.Group className="mb-3">
           <Form.Label htmlFor="colorInput">Notes Color</Form.Label>
           <Form.Control
             type="color"
@@ -85,7 +85,7 @@ const CreateNotes: React.FunctionComponent<ICreateNotesProps> = ({
             title="choose your color"
             ref={colorRef}
           />
-        </Form.Group>
+        </Form.Group> */}
         <Button type="submit" variant="primary">
           Submit
         </Button>
