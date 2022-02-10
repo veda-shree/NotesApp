@@ -127,21 +127,6 @@ describe("<Notes home page/>", () => {
     expect(currentNode3).not.toBeInTheDocument();
   });
 
-  it("captures changes", (done) => {
-    function handleEditFormChange(event) {
-      expect(event.target.value).toEqual("React");
-      done();
-    }
-    render(
-      <input
-        onChange={handleEditFormChange}
-        placeholder="Enter title for the Note"
-      />
-    );
-    const td = screen.getByPlaceholderText("Enter title for the Note");
-    fireEvent.change(td, { target: { value: "React" } });
-  });
-
   it("popover respond to hover", () => {
     render(<App />);
     const nullPopover = screen.queryByTestId("edit-title");
