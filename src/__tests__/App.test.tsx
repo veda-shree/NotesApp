@@ -105,6 +105,15 @@ describe("<Notes home page/>", () => {
     const currentNode3 = screen.getByText("test1");
     expect(currentNode3).toBeInTheDocument();
   });
+  it("shoul throw error", () => {
+    render(<App />);
+    const currentNode = screen.getByPlaceholderText("Enter title for the Note");
+    userEvent.type(currentNode, "");
+    const currentNode1 = screen.getByPlaceholderText("Enter text for the Note");
+    userEvent.type(currentNode1, "");
+    const currentNode2 = screen.getByText("Submit");
+    fireEvent.click(currentNode2);
+  });
 
   it("should test handleOnEdit", () => {
     render(<App />);
