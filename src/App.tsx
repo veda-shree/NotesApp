@@ -1,4 +1,4 @@
-import React, { useState, VoidFunctionComponent } from "react";
+import React, { useState } from "react";
 import { Note } from "./models/note.model";
 import Header from "./components/Header";
 import "./App.css";
@@ -6,20 +6,8 @@ import { Col, Container, Row } from "react-bootstrap";
 import CreateNotes from "./components/CreateNotes";
 import data from "./mock-data.json";
 import "antd/dist/antd.css";
-import { Modal } from "antd";
 import { nanoid } from "nanoid";
 
-// export interface Props {
-//   handleOnDelete: (id: string | number) => void;
-//   handleEditFormChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-//   handleEditFormSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-//   handleSubmit: (event: React.MouseEvent<HTMLButtonElement>) => void;
-//   handleOnEdit: (
-//     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-//     note: any
-//   ) => void;
-//   handleOnCancel: () => void;
-// }
 function App() {
   const [editNoteId, seteditNoteId] = useState("" as string);
   const [notes, setnotes] = useState<Note[]>(data);
@@ -31,17 +19,17 @@ function App() {
 
   const handleOnDelete = (id: string | number) => {
     console.log("click the delete button");
-    Modal.confirm({
-      title: "Are you sure you want to delete?",
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "Cancel",
-      onCancel: handleOnCancel,
-      onOk: () => {
-        setnotes(notes.filter((note) => note.id !== id));
-        console.log("Item deleted successfully!");
-      },
-    });
+    // Modal.confirm({
+    //   title: "Are you sure you want to delete?",
+    //   okText: "Yes",
+    //   okType: "danger",
+    //   cancelText: "Cancel",
+    //   onCancel: handleOnCancel,
+    //   onOk: () => {
+    setnotes(notes.filter((note) => note.id !== id));
+    console.log("Item deleted successfully!");
+    //   },
+    // });
   };
 
   const handleEditFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +61,7 @@ function App() {
     seteditNoteId(null);
   };
 
-  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOnSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     console.log(event.currentTarget);
     const editedEmp = {
@@ -131,7 +119,7 @@ function App() {
                       <tr>
                         <td>
                           <input
-                            data-testid="title"
+                            data-testid="edit-title"
                             type="text"
                             placeholder="Enter title for the Note"
                             name="title"
@@ -153,8 +141,8 @@ function App() {
                           <button
                             className="button"
                             type="submit"
-                            onClick={handleSubmit}
-                            data-testid="submit"
+                            onClick={handleOnSubmit}
+                            data-testid="save"
                           >
                             Save
                           </button>
@@ -174,7 +162,7 @@ function App() {
                         <td>{note.text}</td>
                         <td>
                           <button
-                            className="button"
+                            data-testid="edit-data"
                             type="submit"
                             onClick={(event) => handleOnEdit(event, note)}
                           >
@@ -182,6 +170,7 @@ function App() {
                           </button>
 
                           <button
+                            data-testid={note.id}
                             className="button"
                             type="submit"
                             onClick={() => handleOnDelete(note.id)}

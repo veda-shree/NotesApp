@@ -21,6 +21,7 @@
     "enzyme": "^3.11.0",
     "gh": "^2.8.9",
     "jest-dom": "^4.0.0",
+    "jest-environment-jsdom-latest": "^26.6.2",
     "jest-mock-console": "^1.2.3",
     "json-server": "^0.17.0",
     "nanoid": "^3.2.0",
@@ -39,7 +40,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "test": "jest ",
+    "test": "jest --coverage",
     "test:watch": "jest --watch",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"

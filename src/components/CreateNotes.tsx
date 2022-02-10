@@ -69,7 +69,7 @@ const CreateNotes: React.FunctionComponent<ICreateNotesProps> = ({
         <Form.Group className="mb-3" controlId="formBasicText">
           <Form.Label>Text</Form.Label>
           <Form.Control
-            placeholder="Enter your Notes"
+            placeholder="Enter text for the Note"
             as="textarea"
             rows={3}
             ref={textRef}
